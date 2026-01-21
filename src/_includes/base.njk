@@ -139,13 +139,15 @@
         {% if publications %}
         <section id="publications">
           <h2>Publications & Talks</h2>
+          <ul class="publications-list">
           {% for pub in publications %}
-          <article class="pub-item">
-            <span class="meta">{{ pub.year }}</span>
-            <h3><a href="{{ pub.link }}">{{ pub.title }}</a></h3>
+          <li class="pub-item">
+            <h3>{{ pub.title }} <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time></h3>
             <p>{{ pub.description }}</p>
-          </article>
+            <p><a href="{{ pub.link }}">{{ pub.title }}</a></p>
+          </li>
           {% endfor %}
+          </ul>
         </section>
         {% endif %}
       </main>
