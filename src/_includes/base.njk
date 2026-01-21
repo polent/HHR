@@ -6,6 +6,41 @@
   <title>{{ title }}</title>
   <meta name="description" content="{{ meta_description }}">
   <link rel="stylesheet" href="/assets/css/style.css">
+  
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Person",
+    "name": "{{ name }}",
+    "jobTitle": "{{ role }}",
+    "url": "https://www.holger-hellinger.de",
+    "sameAs": [
+      {% for link in links %}"{{ link.url }}"{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "{{ contact.location }}"
+    },
+    "telephone": "{{ contact.phone }}",
+    "email": "{{ contact.email }}",
+    "worksFor": [
+      {% for job in experience %}{
+        "@type": "Organization",
+        "name": "{{ job.company }}"
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    "alumniOf": [
+      {% for edu in education %}{
+        "@type": "EducationalOrganization",
+        "name": "{{ edu.institution }}"
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    "knowsAbout": [
+      {% for skill in skills %}"{{ skill.name }}"{% if not loop.last %},{% endif %}{% endfor %}
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="container">
