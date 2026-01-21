@@ -10,10 +10,9 @@ contact:
   email: "sitte@polente.de"
   location: "Gau-Algesheim, Germany"
 
-tldr: "Holger Hellinger is a Director of Experience Engineering with more than 25 years in technology. He leads teams, shapes cross functional delivery, and builds scalable digital products with a strong focus on accessibility, performance, and modern web standards."
+tldr: "I am a Director of Experience Engineering with more than 25 years in technology. I lead teams, shapes cross functional delivery, and builds scalable digital products with a strong focus on accessibility, performance, and modern web standards."
 
 summary: |
-  <p>I am a Director of Experience Engineering with more than 25 years in technology. I lead teams, shape cross-functional delivery, and build scalable digital products that connect human creativity with intelligent systems.</p>
   <p>In roles like Practicelead Deutschland, Teamlead and Projectlead I have guided complex programs from idea to rollout across regions and industries, focusing on long-term maintainability and measurable client value.</p>
   <p>My focus is on modern, responsive and accessible web experiences based on W3C standards, mobile first thinking and technologies such as HTML5, CSS, JavaScript, Node and mobile platforms. I design modular architectures that stay flexible and scalable.</p>
   <p>I promote Agile ways of working for distributed teams and have led international delivery and outsourcing setups. Accessibility, SEO, performance, and CMS scaling are part of my standard toolkit, alongside a strong focus on automation and engineering excellence.</p>

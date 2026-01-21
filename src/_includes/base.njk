@@ -165,5 +165,14 @@
 
     </div>
   </div>
+
+  <!-- Open all details elements when printing -->
+  <script>
+    if (window.matchMedia('print').matches) {
+      [...document.querySelectorAll("details")].forEach(detailEl => {
+        detailEl.setAttribute("open", true);
+      });
+    }
+  </script>
 </body>
 </html>

@@ -316,6 +316,12 @@ h3 {
     display: block;
   }
 
+  .about-content {
+    display: block !important; /* Ensure content is visible */
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
   /* Page Breaks */
   .job-item, .edu-item, .pub-item {
     break-inside: avoid;
