@@ -77,8 +77,14 @@ body {
   font-size: 0.9rem;
 }
 
-.contact-list a {
+.contact-list a,
+.publications-list a {
   color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.contact-list a:hover,
+.publications-list a:hover {
   text-decoration: none;
 }
 
