@@ -239,9 +239,7 @@ h3 {
   }
 
   .main-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Keep 2-col for print */
-    gap: 2cm;
+    display: block; /* Use mobile layout for print */
   }
 
   /* Hide interactive elements */
