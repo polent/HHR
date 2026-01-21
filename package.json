@@ -1,0 +1,24 @@
+{
+  "name": "holger-hellinger-cv",
+  "version": "1.0.0",
+  "description": "Personal CV for Holger Hellinger - Director Experience Engineering",
+  "main": ".eleventy.js",
+  "scripts": {
+    "build": "eleventy",
+    "watch": "eleventy --watch",
+    "serve": "eleventy --serve",
+    "dev": "eleventy --serve",
+    "clean": "rm -rf _site"
+  },
+  "keywords": [
+    "cv",
+    "eleventy",
+    "11ty",
+    "static-site-generator"
+  ],
+  "author": "Holger Hellinger",
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

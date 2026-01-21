@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header-main">
+      <img 
+        class="profile-img"
+        alt="Portrait of {{ name }}" 
+        width="160" 
+        height="160" 
+        sizes="160px" 
+        src="/assets/images/HolgerHellinger160.png" 
+        srcset="
+          /assets/images/HolgerHellinger160.png 160w,
+          /assets/images/HolgerHellinger320.png 320w,
+          /assets/images/HolgerHellinger640.png 640w
+        ">
+      
+      <div class="header-content">
+        <h1>{{ name }}</h1>
+        <div class="role">{{ role }}</div>
+        
+        <ul class="contact-list">
+          <li>{{ contact.location }}</li>
+          <li><a href="tel:{{ contact.phone | replace(' ', '') }}">{{ contact.phone }}</a></li>
+          <li><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Intro / TLDR -->
+    <section class="intro-section">
+      <div class="tldr">
+        {{ tldr }}
+      </div>
+      <details>
+        <summary>More about me</summary>
+        <div class="about-content">
+          {{ summary | safe }}
+        </div>
+      </details>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="main-content">
+      
+      <!-- Left Column: Experience & Education -->
+      <main>
+        <section id="experience">
+          <h2>Work Experience</h2>
+          {% for job in experience %}
+          <article class="job-item">
+            <span class="meta">{{ job.period }}</span>
+            <h3>{{ job.role }}</h3>
+            <div class="company"><strong>{{ job.company }}</strong></div>
+            <p>{{ job.description }}</p>
+          </article>
+          {% endfor %}
+        </section>
+
+        {% if publications %}
+        <section id="publications">
+          <h2>Publications & Talks</h2>
+          {% for pub in publications %}
+          <article class="pub-item">
+            <span class="meta">{{ pub.year }}</span>
+            <h3><a href="{{ pub.link }}">{{ pub.title }}</a></h3>
+            <p>{{ pub.description }}</p>
+          </article>
+          {% endfor %}
+        </section>
+        {% endif %}
+      </main>
+
+      <!-- Right Column: Skills, Education, Links -->
+      <aside>
+        <section id="skills">
+          <h2>Skills</h2>
+          <ul class="skills-list">
+            {% for skill in skills %}
+            <li class="skill-item">
+              <div class="skill-header">
+                <span>{{ skill.name }}</span>
+                <span>{{ skill.level }}%</span>
+              </div>
+              <div class="skill-bar">
+                <span class="skill-fill" style="width: {{ skill.level }}%;"></span>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section id="education">
+          <h2>Education</h2>
+          {% for edu in education %}
+          <div class="edu-item">
+            <span class="meta">{{ edu.year }}</span>
+            <div><strong>{{ edu.degree }}</strong></div>
+            <div>{{ edu.institution }}</div>
+          </div>
+          {% endfor %}
+        </section>
+
+        {% if links %}
+        <section id="links">
+          <h2>Links</h2>
+          <ul class="links-list">
+            {% for link in links %}
+            <li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+      </aside>
+
+    </div>
+  </div>
+</body>
+</html>
