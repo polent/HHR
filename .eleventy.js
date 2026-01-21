@@ -7,6 +7,20 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/robots.txt");
   eleventyConfig.addPassthroughCopy("src/site.webmanifest");
 
+  // Add Nunjucks filter to load SVG files inline
+  eleventyConfig.addNunjucksFilter("inlineSvg", function(filename) {
+    const fs = require("node:fs");
+    const path = require("node:path");
+    const filepath = path.join(__dirname, "src/assets/icons", filename);
+    try {
+      const content = fs.readFileSync(filepath, "utf8");
+      return content;
+    } catch (error) {
+      console.warn(`SVG file not found: ${filepath}`, error.message);
+      return "";
+    }
+  });
+
   return {
     dir: {
       input: "src",
