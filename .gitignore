@@ -1,1 +1,4 @@
 .slingshot
+node_modules
+dist
+_site
