@@ -22,14 +22,19 @@ summary: |
 links:
   - label: "polente.de"
     url: "https://polente.de/"
+    icon: "laptop-min.svg"
   - label: "GitHub"
     url: "https://github.com/polent"
+    icon: "github-min.svg"
   - label: "Mastodon"
     url: "https://hellinger.wtf/@holger"
+    icon: "mastodon-min.svg"
   - label: "LinkedIn"
     url: "https://linkedin.com/in/holgerhellinger"
+    icon: "linkedin-min.svg"
   - label: "Xing"
     url: "https://www.xing.com/profile/Holger_Hellinger/"
+    icon: "xing-min.svg"
 
 experience:
   - period: "2007 - Now"

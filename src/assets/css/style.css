@@ -218,15 +218,53 @@ h3 {
   margin-bottom: var(--spacing-sm);
 }
 
-.links-list a {
+.link-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text-color);
   text-decoration: none;
   border-bottom: 1px dotted var(--text-muted);
+  transition: all 0.2s ease;
 }
 
-.links-list a:hover {
+.link-with-icon:hover {
   color: var(--accent-color);
   border-bottom-style: solid;
+}
+
+.link-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-block;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+  /* Invert white SVG icons to match light/dark mode */
+  filter: brightness(0) saturate(100%);
+  color: var(--text-color);
+}
+
+/* In dark mode, keep icons bright */
+@media (prefers-color-scheme: dark) {
+  .link-icon {
+    filter: brightness(1.5) saturate(100%);
+  }
+}
+
+.link-with-icon:hover .link-icon {
+  opacity: 1;
+  filter: brightness(0) saturate(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .link-with-icon:hover .link-icon {
+    filter: brightness(2) saturate(100%);
+  }
+}
+
+.link-text {
+  display: inline;
 }
 
 /* Print Styles */
