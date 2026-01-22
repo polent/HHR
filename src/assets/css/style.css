@@ -330,10 +330,11 @@ h3 {
   }
 
   /* Show URLs for external links */
-  .link-text {
+  .link-text,
+  progress {
     display: none;
   }
-  
+
   a[href^="http"]::after {
     content: " (" attr(href) ")";
     word-break: break-all;
