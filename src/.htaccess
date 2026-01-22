@@ -1,22 +1,10 @@
 RewriteEngine On
 
-# Remove trailing slash from non-filepath urls
-
-RewriteCond %{REQUEST_URI} /(.+)/$
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ <https://www.holger-hellinger.de/%1> [R=301,L]
-
-# Include trailing slash on directory
-
-RewriteCond %{REQUEST_URI} !(.+)/$
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^(.+)$ <https://www.holger-hellinger.de/$1/> [R=301,L]
-
 # Force HTTPS and WWW
 
 RewriteCond %{HTTP_HOST} !^www\.(.*)$ [OR,NC]
-RewriteCond %{https} off  
-RewriteRule ^(.*)$ <https://www.holger-hellinger.de/$1> [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://www.holger-hellinger.de/$1 [R=301,L]
 
 <IfModule mod_headers.c>
     Header set X-UA-Compatible "IE=edge"

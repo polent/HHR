@@ -10,7 +10,7 @@ contact:
   email: "sitte@polente.de"
   location: "Gau-Algesheim, Germany"
 
-tldr: "I am a Director of Experience Engineering with more than 25 years in technology. I lead teams, shapes cross functional delivery, and builds scalable digital products with a strong focus on accessibility, performance, and modern web standards."
+tldr: "I am a Director of Experience Engineering with more than 25 years in technology. I lead teams, shape cross functional delivery, and build scalable digital products with a strong focus on accessibility, performance, and modern web standards."
 
 summary: |
   <p>In roles like Practicelead Deutschland, Teamlead and Projectlead I have guided complex programs from idea to rollout across regions and industries, focusing on long-term maintainability and measurable client value.</p>

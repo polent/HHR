@@ -78,13 +78,15 @@ body {
 }
 
 .contact-list a,
-.publications-list a {
+.publications-list a,
+.link-with-icon {
   color: var(--accent-color);
   text-decoration: underline;
 }
 
 .contact-list a:hover,
-.publications-list a:hover {
+.publications-list a:hover,
+.link-with-icon:hover {
   text-decoration: none;
 }
 
@@ -236,15 +238,7 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-color);
-  text-decoration: none;
-  border-bottom: 1px dotted var(--text-muted);
   transition: all 0.2s ease;
-}
-
-.link-with-icon:hover {
-  color: var(--accent-color);
-  border-bottom-style: solid;
 }
 
 .link-icon {
@@ -331,5 +325,11 @@ h3 {
 
   .intro-section {
     page-break-after: avoid;
+  }
+
+  /* Show URLs for external links */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    word-break: break-all;
   }
 }
