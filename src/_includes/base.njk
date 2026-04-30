@@ -42,36 +42,86 @@
   <link rel="stylesheet" href="/assets/css/style.css">
   
   <!-- JSON-LD Structured Data -->
+  {%- set nameParts = name.split(' ') -%}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org/",
-    "@type": "Person",
-    "name": "{{ name }}",
-    "jobTitle": "{{ role }}",
-    "url": "https://www.holger-hellinger.de",
-    "sameAs": [
-      {% for link in links %}"{{ link.url }}"{% if not loop.last %},{% endif %}{% endfor %}
-    ],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "{{ contact.location }}"
-    },
-    "telephone": "{{ contact.phone }}",
-    "email": "{{ contact.email }}",
-    "worksFor": [
-      {% for job in experience %}{
-        "@type": "Organization",
-        "name": "{{ job.company }}"
-      }{% if not loop.last %},{% endif %}{% endfor %}
-    ],
-    "alumniOf": [
-      {% for edu in education %}{
-        "@type": "EducationalOrganization",
-        "name": "{{ edu.institution }}"
-      }{% if not loop.last %},{% endif %}{% endfor %}
-    ],
-    "knowsAbout": [
-      {% for skill in skills %}"{{ skill.name }}"{% if not loop.last %},{% endif %}{% endfor %}
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.holger-hellinger.de/#person",
+        "name": "{{ name }}",
+        "givenName": "{{ nameParts[0] }}",
+        "familyName": "{{ nameParts | last }}",
+        "jobTitle": "{{ role }}",
+        "description": "{{ meta_description }}",
+        "image": "https://www.holger-hellinger.de/assets/images/HolgerHellinger640.png",
+        "url": "https://www.holger-hellinger.de",
+        "sameAs": [
+          {% for link in links %}"{{ link.url }}"{% if not loop.last %},{% endif %}{% endfor %}
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "{{ contact.location }}",
+          "addressCountry": "DE"
+        },
+        "telephone": "{{ contact.phone }}",
+        "email": "{{ contact.email }}",
+        "worksFor": [
+          {% for job in experience -%}
+          {%- set periodParts = job.period.replace('–', '-').split('-') -%}
+          {%- set startDate = periodParts[0] | trim -%}
+          {%- set endDate = periodParts[1] | trim if periodParts.length > 1 else '' -%}
+          {
+            "@type": "OrganizationRole",
+            "roleName": "{{ job.role }}",
+            "startDate": "{{ startDate }}",
+            {% if endDate and endDate != 'Now' %}"endDate": "{{ endDate }}",{% endif %}
+            "worksFor": {
+              "@type": "Organization",
+              "name": "{{ job.company }}"
+            }
+          }{% if not loop.last %},{% endif %}{% endfor %}
+        ],
+        "alumniOf": [
+          {% for edu in education -%}
+          {%- set yearParts = edu.year.replace('–', '-').split('-') -%}
+          {%- set eduStart = yearParts[0] | trim -%}
+          {%- set eduEnd = yearParts[1] | trim if yearParts.length > 1 else '' -%}
+          {
+            "@type": "OrganizationRole",
+            "roleName": "{{ edu.degree }}",
+            "startDate": "{{ eduStart }}",
+            {% if eduEnd %}"endDate": "{{ eduEnd }}",{% endif %}
+            "alumniOf": {
+              "@type": "EducationalOrganization",
+              "name": "{{ edu.institution }}"
+            }
+          }{% if not loop.last %},{% endif %}{% endfor %}
+        ],
+        "knowsAbout": [
+          {%- set comma = false -%}
+          {%- for skillGroup in skills -%}
+            {%- for item in skillGroup.items -%}
+              {%- if comma -%},{%- endif -%}
+              "{{ item }}"
+              {%- set comma = true -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        ]
+      }{% if publications %},
+      {% for pub in publications -%}
+      {%- set isVideo = 'youtube' in pub.link -%}
+      {
+        "@type": "{% if isVideo %}VideoObject{% else %}BlogPosting{% endif %}",
+        "{% if isVideo %}name{% else %}headline{% endif %}": "{{ pub.title }}",
+        "{% if isVideo %}embedUrl{% else %}url{% endif %}": "{{ pub.link }}",
+        "{% if isVideo %}uploadDate{% else %}datePublished{% endif %}": "{{ pub.year }}",
+        {% if pub.description %}"description": "{{ pub.description }}",{% endif %}
+        "author": {
+          "@id": "https://www.holger-hellinger.de/#person"
+        }
+      }{% if not loop.last %},{% endif %}{% endfor %}{% endif %}
     ]
   }
   </script>
@@ -111,109 +161,109 @@
       </div>
     </header>
 
-    <!-- Intro / TLDR -->
-    <section class="intro-section">
+    <!-- Summary -->
+    <section id="summary" class="intro-section">
+      <h2 class="visually-hidden">Summary</h2>
       <div class="tldr">
         {{ tldr }}
       </div>
-      <details>
-        <summary>More about me</summary>
-        <div class="about-content">
-          {{ summary | safe }}
-        </div>
-      </details>
+      <div class="about-content">
+        {{ summary | safe }}
+      </div>
     </section>
 
-    <!-- Main Content Grid -->
+    <!-- Main Content -->
     <div class="main-content">
-      
-      <!-- Left Column: Experience & Education -->
-      <main>
-        <section id="experience">
-          <h2>Work Experience</h2>
-          {% for job in experience %}
-          <article class="job-item">
-            <span class="meta">{{ job.period }}</span>
+      <section id="experience">
+        <h2>Experience</h2>
+        {% for job in experience %}
+        <article class="job-item">
+          <span class="meta">{{ job.period }}</span>
+          <div class="job-body">
             <h3>{{ job.role }}</h3>
             <div class="company"><strong>{{ job.company }}</strong></div>
             <p>{{ job.description }}</p>
-          </article>
-          {% endfor %}
-        </section>
+          </div>
+        </article>
+        {% endfor %}
+      </section>
 
-        {% if publications %}
-        <section id="publications">
-          <h2>Publications & Talks</h2>
-          <ul class="publications-list">
-          {% for pub in publications %}
-          <li class="pub-item">
-            <h3>{{ pub.title }} <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time></h3>
-            <p>{{ pub.description }}</p>
-            <p><a href="{{ pub.link }}">{{ pub.title }}</a></p>
-          </li>
-          {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
-      </main>
-
-      <!-- Right Column: Skills, Education, Links -->
-      <aside>
-        <section id="skills">
-          <h2>Skills</h2>
-          <ul class="skills-list">
-            {% for skill in skills %}
-            <li class="skill-item">
-              <div class="skill-header">
-                <span>{{ skill.name }}</span>
-                <span>{{ skill.level }}%</span>
-              </div>
-              <progress class="skill-progress" value="{{ skill.level }}" max="100" aria-label="{{ skill.name }}: {{ skill.level }}% proficiency"></progress>
-            </li>
-            {% endfor %}
-          </ul>
-        </section>
-
-        <section id="education">
-          <h2>Education</h2>
-          {% for edu in education %}
-          <div class="edu-item">
-            <span class="meta">{{ edu.year }}</span>
-            <div><strong>{{ edu.degree }}</strong></div>
-            <div>{{ edu.institution }}</div>
+      <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-container">
+          {% for skillGroup in skills %}
+          <div class="skill-group">
+            <h3 class="skill-group-title">{{ skillGroup.group }}</h3>
+            <ul class="skills-list">
+              {% for item in skillGroup.items %}
+              <li class="skill-item">{{ item }}</li>
+              {% endfor %}
+            </ul>
           </div>
           {% endfor %}
-        </section>
+        </div>
+      </section>
 
-        {% if links %}
-        <section id="links">
-          <h2>Links</h2>
-          <ul class="links-list">
-            {% for link in links %}
-            <li>
-              <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
-                {% if link.icon %}
-                {{ link.icon | inlineSvg | safe }}
-                {% endif %}
-                <span class="link-text">{{ link.label }}</span>
-              </a>
-            </li>
+      <section id="education">
+        <h2>Education</h2>
+        <table class="edu-table">
+          <caption class="visually-hidden">Education history</caption>
+          <thead>
+            <tr>
+              <th scope="col">Year</th>
+              <th scope="col">Degree</th>
+              <th scope="col">Institution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for edu in education %}
+            <tr>
+              <td class="edu-year">{{ edu.year }}</td>
+              <td class="edu-degree"><strong>{{ edu.degree }}</strong></td>
+              <td class="edu-institution">{{ edu.institution }}</td>
+            </tr>
             {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
-      </aside>
+          </tbody>
+        </table>
+      </section>
 
+      {% if publications %}
+      <section id="publications">
+        <h2>Publications & Projects</h2>
+        <ul class="publications-list">
+        {% for pub in publications %}
+        <li class="pub-item">
+          <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time>
+          <div class="pub-body">
+            <h3>{{ pub.title }}</h3>
+            {% if pub.description %}<p>{{ pub.description }}</p>{% endif %}
+            <p><a href="{{ pub.link }}">{{ pub.title }}</a></p>
+          </div>
+        </li>
+        {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if links %}
+      <section id="links">
+        <h2>Links</h2>
+        <ul class="links-list">
+          {% for link in links %}
+          <li>
+            <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
+              {% if link.icon %}
+              {{ link.icon | inlineSvg | safe }}
+              {% endif %}
+              <span class="link-text">{{ link.label }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
     </div>
   </div>
 
-  <!-- Open all details elements when printing -->
-  <script>
-    if (window.matchMedia('print').matches) {
-      [...document.querySelectorAll("details")].forEach(detailEl => {
-        detailEl.setAttribute("open", true);
-      });
-    }
-  </script>
 </body>
 </html>
