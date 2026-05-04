@@ -2,39 +2,45 @@
 
 A modern, accessible, and responsive CV website built with **Eleventy (11ty)** and semantic HTML/CSS.
 
+Live site: <https://polente.de/>
+
 ## Features
 
-✅ **Static Site Generation** - Built with Eleventy for fast, reliable deployment  
-✅ **Responsive Design** - Mobile-first approach using CSS Grid & Flexbox  
-✅ **Accessible** - Semantic HTML5, ARIA labels, and high contrast  
-✅ **Dark Mode** - Automatic light/dark theme support with `color: light-dark()`  
-✅ **Printable** - Print-friendly styling with proper page breaks  
-✅ **No JavaScript** - 110% functional without client-side JS  
-✅ **Lightweight CSS** - Clean, custom CSS without heavy frameworks  
+- **Static Site Generation** — built with Eleventy for fast, reliable deployment
+- **Responsive Design** — mobile-first, CSS Grid & Flexbox
+- **Accessible** — semantic HTML5, ARIA labels, WCAG AA contrast
+- **Dark Mode** — automatic light/dark via CSS `light-dark()`
+- **Print-friendly** — dedicated print styles, Ctrl+P → save as PDF
+- **No client-side JavaScript** — pure HTML/CSS output
+- **Lightweight CSS** — custom CSS, no frameworks
+- **Inline SVG icons** — icons are inlined at build time via a custom Nunjucks filter
 
 ## Project Structure
 
 ```
-src/
-├── index.md                    # CV data and content (YAML frontmatter)
-├── data.md                     # Original data reference
-├── _includes/
-│   └── base.njk               # HTML template (Nunjucks)
-├── assets/
-│   ├── css/
-│   │   └── style.css          # Screen and print styles
-│   └── images/
-│       └── (profile images)
-.eleventy.js                    # 11ty configuration
-package.json                    # Dependencies and scripts
-README.md                       # This file
+.
+├── .eleventy.js              # Eleventy configuration (passthrough + inlineSvg filter)
+├── package.json              # Dependencies and scripts
+├── src/
+│   ├── index.json            # CV data (JSON) — name, contact, experience, links, ...
+│   ├── index.njk             # Page entry, uses base.njk layout
+│   ├── robots.txt
+│   ├── site.webmanifest
+│   ├── _includes/
+│   │   └── base.njk          # HTML template (Nunjucks)
+│   └── assets/
+│       ├── css/style.css     # Screen and print styles
+│       ├── icons/*.svg       # Inlined SVG icons (linkedin, github, ...)
+│       └── images/           # Profile images + responsive variants
+├── docs/                     # Project notes, AI prompt, checklists
+└── _site/                    # Build output (generated)
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 14+ and npm
+- Node.js 18+ and npm (Eleventy 3 requires Node 18 or newer)
 
 ### Installation
 
@@ -50,21 +56,19 @@ Build and serve locally with live reload:
 npm run dev
 ```
 
-The site will be available at `http://localhost:8080`
+The site will be available at <http://localhost:8080>.
 
 ### Build
 
-Generate the static site:
+Generate the static site into `_site/`:
 
 ```bash
 npm run build
 ```
 
-Output files are in the `_site/` directory.
-
 ### Watch Mode
 
-Automatically rebuild on file changes:
+Rebuild on file changes (no dev server):
 
 ```bash
 npm run watch
@@ -74,96 +78,79 @@ npm run watch
 
 ### Edit Your CV Data
 
-All CV content is stored in `src/index.md` frontmatter (YAML). Update:
-- Personal information (name, role, location)
-- Contact details
-- Experience entries
-- Education history
-- Skills with proficiency levels
-- Links
+All CV content lives in [src/index.json](src/index.json). Update fields like `name`, `role`, `contact`, `summary`, `experience`, `education`, `skills`, and `links`. Example:
 
-Example:
-```yaml
----
-name: Your Name
-role: Your Role
-contact:
-  email: your@email.com
-  phone: "+49 123 456789"
-  location: City, Country
-experience:
-  - period: "2020 - Now"
-    role: "Job Title"
-    company: "Company Name"
-    description: "Description"
----
+```json
+{
+  "name": "Your Name",
+  "role": "Your Role",
+  "contact": {
+    "email": "your@email.com",
+    "phone": "+49 123 456789",
+    "location": "City, Country"
+  },
+  "experience": [
+    {
+      "period": "2020 - Now",
+      "role": "Job Title",
+      "company": "Company Name",
+      "description": "Description"
+    }
+  ]
+}
 ```
+
+The template that renders this data is [src/index.njk](src/index.njk), which extends [src/_includes/base.njk](src/_includes/base.njk).
 
 ### Customize Styling
 
-Edit `src/assets/css/style.css` to adjust:
-- Color scheme (light/dark mode colors)
-- Typography
-- Layout and spacing
-- Print styles
+Edit [src/assets/css/style.css](src/assets/css/style.css) for colors, typography, layout, and print rules. The colour scheme uses CSS custom properties with `light-dark()` for automatic dark-mode support, e.g.:
 
-Key CSS variables in `:root`:
 ```css
---bg-color: light-dark(#ffffff, #1a1a1a);
---text-color: light-dark(#222222, #f0f0f0);
---accent-color: light-dark(#005a9c, #4da6ff);
+:root {
+  color-scheme: light dark;
+  --bg-color: light-dark(#ffffff, #1a1a1a);
+  --text-color: light-dark(#222222, #f0f0f0);
+  --accent-color: light-dark(#005a9c, #4da6ff);
+}
 ```
 
 ### Profile Image
 
-Place responsive profile images in `src/assets/images/`:
-- `HolgerHellinger160.png` (160x160px)
-- `HolgerHellinger320.png` (320x320px)
-- `HolgerHellinger640.png` (640x640px)
+Drop responsive profile images into [src/assets/images/](src/assets/images/):
 
-The template automatically uses responsive image srcset.
+- `HolgerHellinger160.png` (160×160)
+- `HolgerHellinger320.png` (320×320)
+- `HolgerHellinger640.png` (640×640)
+
+The template emits a responsive `srcset` automatically.
+
+### Icons
+
+SVG icons in [src/assets/icons/](src/assets/icons/) are inlined into the HTML at build time via the `inlineSvg` Nunjucks filter defined in [.eleventy.js](.eleventy.js). Add a new icon by dropping the `.svg` file into that folder and referencing it from the template or `index.json` (`links[].icon`).
 
 ## Deployment
 
-### Static Hosting (Recommended)
+`_site/` is fully static — deploy to any static host: Netlify, Vercel, GitHub Pages, Cloudflare Pages, AWS S3 + CloudFront, etc.
 
-The `_site/` folder contains fully static HTML/CSS - deploy to:
-- Netlify
-- Vercel
-- GitHub Pages
-- AWS S3 + CloudFront
-- Any static hosting service
-
-### Build Command
-
-```bash
-npm run build
-```
-
-### Output Directory
-
-`_site/`
+- **Build command:** `npm run build`
+- **Output directory:** `_site/`
 
 ## Accessibility
 
-- ✅ Semantic HTML5 (`<header>`, `<main>`, `<article>`, `<section>`)
-- ✅ Proper heading hierarchy
-- ✅ Accessible color contrast (WCAG AA)
-- ✅ Responsive images with alt text
-- ✅ Keyboard navigable
-- ✅ Screen reader friendly
+- Semantic HTML5 (`<header>`, `<main>`, `<article>`, `<section>`)
+- Proper heading hierarchy
+- WCAG AA colour contrast
+- Responsive images with alt text
+- Keyboard navigable, screen-reader friendly
 
 ## Print & PDF
 
-The CV is print-optimized:
+The CV is print-optimised:
 
-1. **From Browser**: Press `Ctrl+P` (Windows) or `Cmd+P` (Mac)
-2. **To PDF**: Use "Save as PDF" option in print dialog
-3. **CSS Features**:
-   - Black text on white background for print
-   - No background colors in print mode
-   - Page breaks avoid breaking content
-   - Hidden non-essential elements
+1. **From browser:** `Ctrl+P` (Windows/Linux) or `Cmd+P` (macOS)
+2. **To PDF:** choose "Save as PDF" in the print dialog
+3. Print CSS forces black-on-white, suppresses backgrounds, avoids breaking content across pages, and hides non-essential elements
 
 ## Browser Support
 
@@ -174,17 +161,16 @@ The CV is print-optimized:
 
 ## Performance
 
-- Zero JavaScript bundles
-- Minimal CSS (< 10KB)
-- Optimized images with srcset
-- Static generation = CDN-friendly
-- Lighthouse scores: 100/100
+- Zero client-side JavaScript
+- Minimal CSS (< 10 KB)
+- Responsive images via `srcset`
+- Static output — CDN-friendly
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
 
 ## Author
 
-Holger Hellinger  
-[Website](https://www.holger-hellinger.de) | [LinkedIn](https://linkedin.com/in/holgerhellinger) | [GitHub](https://github.com/polent)
+Holger Hellinger
+[polente.de](https://polente.de/) · [LinkedIn](https://linkedin.com/in/holgerhellinger) · [GitHub](https://github.com/polent) · [Mastodon](https://hellinger.wtf/@holger) · [Xing](https://www.xing.com/profile/Holger_Hellinger/)
