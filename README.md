@@ -2,7 +2,7 @@
 
 A modern, accessible, and responsive CV website built with **Eleventy (11ty)** and semantic HTML/CSS.
 
-Live site: <https://polente.de/>
+Live site: <https://www.holger-hellinger.de/>
 
 ## Features
 
