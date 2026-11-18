@@ -28,7 +28,7 @@
   <!-- Additional SEO & Social Meta Tags -->
   <meta name="author" content="{{ name }}">
   <meta name="keywords" content="experience engineering, director, web development, leadership, accessibility, performance">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f6f5f2">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="white">
@@ -136,67 +136,129 @@
       {{ ai_prompt }}
     </p>
   </div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <div class="container">
-    
+    <div class="top-bar">
+      <fieldset class="theme-switcher">
+        <legend class="visually-hidden">Color theme</legend>
+        <label class="theme-option">
+          <input type="radio" name="theme" value="auto" checked>
+          <span>Auto</span>
+        </label>
+        <label class="theme-option">
+          <input type="radio" name="theme" value="light">
+          <span>Light</span>
+        </label>
+        <label class="theme-option">
+          <input type="radio" name="theme" value="dark">
+          <span>Dark</span>
+        </label>
+      </fieldset>
+    </div>
+
     <!-- Header -->
     <header class="header-main">
-      <img 
+      <img
         class="profile-img"
-        alt="Portrait of {{ name }}" 
-        width="160" 
-        height="160" 
-        sizes="160px" 
-        src="/assets/images/HolgerHellinger160.png" 
+        alt="Portrait of {{ name }}"
+        width="160"
+        height="160"
+        sizes="160px"
+        src="/assets/images/HolgerHellinger160.png"
         srcset="
           /assets/images/HolgerHellinger160.png 160w,
           /assets/images/HolgerHellinger320.png 320w,
           /assets/images/HolgerHellinger640.png 640w
         ">
-      
+
       <div class="header-content">
         <h1>{{ name }}</h1>
-        <div class="role">{{ role }}</div>
-        
+        <p class="role">{{ role }}</p>
+
         <ul class="contact-list">
-          <li>{{ contact.location }}</li>
-          <li><a href="tel:{{ contact.phone | replace(' ', '') }}">{{ contact.phone }}</a></li>
-          <li><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></li>
+          <li>
+            <span class="contact-item">
+              <span class="contact-icon" aria-hidden="true">{{ "address-min.svg" | inlineSvg | safe }}</span>
+              <span>{{ contact.location }}</span>
+            </span>
+          </li>
+          <li>
+            <a href="tel:{{ contact.phone | replace(' ', '') }}" class="contact-item">
+              <span class="contact-icon" aria-hidden="true">{{ "telephone-min.svg" | inlineSvg | safe }}</span>
+              <span>{{ contact.phone }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:{{ contact.email }}" class="contact-item">
+              <span class="contact-icon" aria-hidden="true">{{ "email-min.svg" | inlineSvg | safe }}</span>
+              <span>{{ contact.email }}</span>
+            </a>
+          </li>
         </ul>
+
+        {% if links %}
+        <nav aria-label="External profiles" class="header-links">
+          <ul class="links-list">
+            {% for link in links %}
+            <li>
+              <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
+                {% if link.icon %}
+                <span class="link-icon" aria-hidden="true">{{ link.icon | inlineSvg | safe }}</span>
+                {% endif %}
+                <span class="link-text">{{ link.label }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
+        {% endif %}
       </div>
     </header>
 
-    <!-- Summary -->
-    <section id="summary" class="intro-section">
-      <h2 class="visually-hidden">Summary</h2>
-      <div class="tldr">
-        {{ tldr }}
-      </div>
-      <div class="about-content">
-        {{ summary | safe }}
-      </div>
-    </section>
-
     <!-- Main Content -->
-    <main class="main-content">
-      <section id="experience">
-        <h2>Experience</h2>
-        {% for job in experience %}
-        <article class="job-item">
-          <span class="meta">{{ job.period }}</span>
-          <div class="job-body">
-            <h3>{{ job.role }}</h3>
-            <div class="company"><strong>{{ job.company }}</strong></div>
-            <p>{{ job.description }}</p>
+    <main id="main-content" class="main-content">
+      <section id="summary" class="cv-section">
+        <div class="section-header">
+          <h2>Summary</h2>
+        </div>
+        <div class="section-body">
+          <div class="tldr-card">
+            <p class="tldr">{{ tldr }}</p>
           </div>
-        </article>
-        {% endfor %}
+          <div class="about-content card-surface">
+            {{ summary | safe }}
+          </div>
+        </div>
       </section>
 
-      <section id="skills">
-        <h2>Skills</h2>
-        <div class="skills-container">
+      <section id="experience" class="cv-section">
+        <div class="section-header">
+          <h2>Experience</h2>
+        </div>
+        <div class="section-body experience-list">
+          {% for job in experience %}
+          <article class="job-item card-surface">
+            <div class="job-header">
+              <span class="meta">{{ job.period }}</span>
+              <div class="job-title-group">
+                <h3>{{ job.role }}</h3>
+                <div class="company">{{ job.company }}</div>
+              </div>
+            </div>
+            <p class="job-description">{{ job.description }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section id="skills" class="cv-section">
+        <div class="section-header">
+          <h2>Skills</h2>
+        </div>
+        <div class="section-body skills-container">
           {% for skillGroup in skills %}
-          <div class="skill-group">
+          <div class="skill-group card-surface">
             <h3 class="skill-group-title">{{ skillGroup.group }}</h3>
             <ul class="skills-list">
               {% for item in skillGroup.items %}
@@ -208,62 +270,55 @@
         </div>
       </section>
 
-      <section id="education">
-        <h2>Education</h2>
-        <table class="edu-table">
-          <caption class="visually-hidden">Education history</caption>
-          <thead>
-            <tr>
-              <th scope="col">Year</th>
-              <th scope="col">Degree</th>
-              <th scope="col">Institution</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for edu in education %}
-            <tr>
-              <td class="edu-year">{{ edu.year }}</td>
-              <td class="edu-degree"><strong>{{ edu.degree }}</strong></td>
-              <td class="edu-institution">{{ edu.institution }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <section id="education" class="cv-section">
+        <div class="section-header">
+          <h2>Education</h2>
+        </div>
+        <div class="section-body">
+          <div class="card-surface table-card">
+            <table class="edu-table">
+              <caption class="visually-hidden">Education history</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Year</th>
+                  <th scope="col">Degree</th>
+                  <th scope="col">Institution</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for edu in education %}
+                <tr>
+                  <td class="edu-year">{{ edu.year }}</td>
+                  <td class="edu-degree"><strong>{{ edu.degree }}</strong></td>
+                  <td class="edu-institution">{{ edu.institution }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       {% if publications %}
-      <section id="publications">
-        <h2>Publications & Projects</h2>
-        <ul class="publications-list">
-        {% for pub in publications %}
-        <li class="pub-item">
-          <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time>
-          <div class="pub-body">
-            <h3>{{ pub.title }}</h3>
-            {% if pub.description %}<p>{{ pub.description }}</p>{% endif %}
-            <p><a href="{{ pub.link }}">{{ pub.title }}</a></p>
-          </div>
-        </li>
-        {% endfor %}
-        </ul>
-      </section>
-      {% endif %}
-
-      {% if links %}
-      <section id="links">
-        <h2>Links</h2>
-        <ul class="links-list">
-          {% for link in links %}
-          <li>
-            <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
-              {% if link.icon %}
-              <span class="link-icon" aria-hidden="true">{{ link.icon | inlineSvg | safe }}</span>
-              {% endif %}
-              <span class="link-text">{{ link.label }}</span>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
+      <section id="publications" class="cv-section">
+        <div class="section-header">
+          <h2>Publications &amp; Projects</h2>
+        </div>
+        <div class="section-body">
+          <ul class="publications-list">
+            {% for pub in publications %}
+            <li class="pub-item card-surface">
+              <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time>
+              <div class="pub-body">
+                <h3>
+                  <a href="{{ pub.link }}" class="pub-link">{{ pub.title }}</a>
+                </h3>
+                {% if pub.description %}<p>{{ pub.description }}</p>{% endif %}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </section>
       {% endif %}
     </main>
