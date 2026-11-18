@@ -6,7 +6,7 @@ A complete, production-ready 11ty (Eleventy) static site generator project has b
 
 ### ✅ Installed & Configured
 
-1. **11ty (Eleventy v3.1.2)** - Static Site Generator
+1. **11ty (Eleventy v3.1.8)** - Static Site Generator
    - Zero-config ready
    - Fast build times
    - Minimal dependencies
@@ -16,7 +16,8 @@ A complete, production-ready 11ty (Eleventy) static site generator project has b
    ├── .eleventy.js              (Configuration)
    ├── package.json              (Dependencies & scripts)
    ├── src/
-   │   ├── index.md              (CV content with YAML frontmatter)
+   │   ├── index.json            (CV content in JSON)
+   │   ├── index.njk             (Page entry)
    │   ├── _includes/
    │   │   └── base.njk          (HTML template)
    │   └── assets/
@@ -35,13 +36,13 @@ A complete, production-ready 11ty (Eleventy) static site generator project has b
    - ✅ Zero JavaScript (110% static)
    - ✅ Lightweight custom CSS (no heavy frameworks)
    - ✅ Responsive images with srcset
-   - ✅ All data from single YAML frontmatter file
+   - ✅ All data from single JSON file (`src/index.json`)
 
 ### 📁 Files Created/Modified
 
 - ✅ `package.json` - NPM scripts for build, dev, watch
 - ✅ `.eleventy.js` - 11ty configuration
-- ✅ `src/index.md` - Complete CV data (all frontmatter)
+- ✅ `src/index.json` & `src/index.njk` - Complete CV data and page entry
 - ✅ `src/_includes/base.njk` - Nunjucks HTML template
 - ✅ `src/assets/css/style.css` - Complete styling
 - ✅ `README.md` - Full documentation
@@ -85,7 +86,7 @@ npm run build
 - External links
 
 #### 3. **Customization**
-Edit `src/index.md` frontmatter to update:
+Edit `src/index.json` to update:
 - Name, role, location
 - Contact information
 - Experience entries
@@ -118,7 +119,7 @@ Automatically served via responsive srcset.
   - HHR-prompt/index.html (Prompt reference)
 ✓ Assets copied: 25 files
 ✓ Build time: 0.25 seconds
-✓ Eleventy version: v3.1.2
+✓ Eleventy version: v3.1.8
 ```
 
 ### 🎨 Design Highlights
@@ -142,7 +143,7 @@ The `_site/` folder is ready to deploy to:
 
 1. **Add profile images** to `src/assets/images/`
 2. **Customize colors** in `src/assets/css/style.css`
-3. **Update CV data** in `src/index.md` frontmatter
+3. **Update CV data** in `src/index.json`
 4. **Run locally**: `npm run dev`
 5. **Deploy**: Push `_site/` to your hosting
 

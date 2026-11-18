@@ -6,7 +6,7 @@ A **production-ready 11ty (Eleventy) static site generator** project has been su
 
 **Build Status**: ✅ **SUCCESSFUL**  
 **Repository**: Initialized with git (2 commits)  
-**Dependencies**: Installed (Eleventy v3.1.2)  
+**Dependencies**: Installed (Eleventy v3.1.8)  
 **Output**: Generated and verified
 
 ---
@@ -14,14 +14,14 @@ A **production-ready 11ty (Eleventy) static site generator** project has been su
 ## 🎯 What Was Delivered
 
 ### ✅ Core Setup
-- ✅ **11ty v3.1.2** installed and configured
+- ✅ **11ty v3.1.8** installed and configured
 - ✅ **Complete package.json** with build scripts
 - ✅ **.eleventy.js** configuration file
 - ✅ **Git repository** initialized with 2 commits
 - ✅ **.gitignore** with standard Node.js/11ty patterns
 
 ### ✅ Content & Data
-- ✅ **src/index.md** - Complete CV data in YAML frontmatter
+- ✅ **src/index.json** & **src/index.njk** - Complete CV data (JSON) and page entry
   - Personal info (name, role, location)
   - Contact details (email, phone)
   - TLDR summary & full biography
@@ -84,7 +84,8 @@ HHR/
 ├── SETUP_COMPLETE.md         ← Setup summary
 │
 ├── src/
-│   ├── index.md              ← CV content (YAML frontmatter)
+│   ├── index.json            ← CV content (JSON)
+│   ├── index.njk             ← Page entry
 │   ├── data.md               ← Original data source
 │   ├── HHR-prompt.md         ← Prompt reference
 │   ├── _includes/
@@ -138,7 +139,7 @@ HHR/
 - ✅ **PDF export** compatible
 
 ### Customization
-- ✅ **Single file content** (src/index.md)
+- ✅ **Single file content** (src/index.json)
 - ✅ **Easy data updates** (YAML frontmatter)
 - ✅ **Themeable** via CSS variables
 - ✅ **Reusable** template system
@@ -210,7 +211,7 @@ npm run dev
 Visit http://localhost:8080
 
 ### 2. **Customize Content**
-Edit `src/index.md` frontmatter:
+Edit `src/index.json`:
 - Update name, role, location
 - Add/edit experience entries
 - Update skills with proficiency levels
@@ -249,7 +250,7 @@ npm run build
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **11ty (Eleventy)** | 3.1.2 | Static site generator |
+| **11ty (Eleventy)** | 3.1.8 | Static site generator |
 | **Nunjucks** | Built-in | Template language |
 | **CSS** | 3 | Styling & layout |
 | **HTML** | 5 | Semantic markup |

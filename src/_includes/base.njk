@@ -29,6 +29,7 @@
   <meta name="author" content="{{ name }}">
   <meta name="keywords" content="experience engineering, director, web development, leadership, accessibility, performance">
   <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="white">
   
@@ -36,8 +37,11 @@
   <link rel="canonical" href="https://www.holger-hellinger.de">
   
   <!-- Favicon & Apple Icons -->
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" href="/assets/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   
   <link rel="stylesheet" href="/assets/css/style.css">
   
@@ -127,7 +131,7 @@
   </script>
 </head>
 <body>
-  <div class="visually-hidden">
+  <div class="visually-hidden" aria-hidden="true">
     <p>
       {{ ai_prompt }}
     </p>
@@ -173,7 +177,7 @@
     </section>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <main class="main-content">
       <section id="experience">
         <h2>Experience</h2>
         {% for job in experience %}
@@ -253,7 +257,7 @@
           <li>
             <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
               {% if link.icon %}
-              {{ link.icon | inlineSvg | safe }}
+              <span class="link-icon" aria-hidden="true">{{ link.icon | inlineSvg | safe }}</span>
               {% endif %}
               <span class="link-text">{{ link.label }}</span>
             </a>
@@ -262,7 +266,7 @@
         </ul>
       </section>
       {% endif %}
-    </div>
+    </main>
   </div>
 
 </body>

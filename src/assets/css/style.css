@@ -254,7 +254,7 @@ h3 {
 }
 
 .skill-item {
-  background-color: var(--surface-color);
+  background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
@@ -291,9 +291,7 @@ h3 {
   align-items: center;
   justify-content: center;
   opacity: 0.8;
-  transition: opacity 0.2s ease, filter 0.2s ease;
-  /* Invert white SVG icons to match light/dark mode */
-  filter: brightness(0) saturate(100%);
+  transition: opacity 0.2s ease;
 }
 
 .link-icon svg {

@@ -1,3 +1,6 @@
+const fs = require("node:fs");
+const path = require("node:path");
+
 module.exports = function (eleventyConfig) {
   // Passthrough copy for assets (CSS, Images)
   eleventyConfig.addPassthroughCopy("src/assets");
@@ -8,13 +11,23 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/site.webmanifest");
 
   // Add Nunjucks filter to load SVG files inline
-  eleventyConfig.addNunjucksFilter("inlineSvg", function(filename) {
-    const fs = require("node:fs");
-    const path = require("node:path");
-    const filepath = path.join(__dirname, "src/assets/icons", filename);
+  eleventyConfig.addNunjucksFilter("inlineSvg", function (filename) {
+    if (typeof filename !== "string" || filename.length === 0) {
+      return "";
+    }
+    const safeName = path.basename(filename);
+    if (path.extname(safeName).toLowerCase() !== ".svg") {
+      console.warn(`Invalid SVG filename: ${filename}`);
+      return "";
+    }
+    const iconsDir = path.resolve(__dirname, "src/assets/icons");
+    const filepath = path.resolve(iconsDir, safeName);
+    if (!filepath.startsWith(iconsDir + path.sep)) {
+      console.warn(`Invalid SVG path: ${filename}`);
+      return "";
+    }
     try {
-      const content = fs.readFileSync(filepath, "utf8");
-      return content;
+      return fs.readFileSync(filepath, "utf8");
     } catch (error) {
       console.warn(`SVG file not found: ${filepath}`, error.message);
       return "";

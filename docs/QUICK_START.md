@@ -23,7 +23,7 @@ Then open http://localhost:8080
 ## File Locations
 
 ### Content
-- **Main CV**: `src/index.md` - Edit the YAML frontmatter here
+- **Main CV**: `src/index.json` (CV data) and `src/index.njk` (page entry)
 
 ### Templates  
 - **HTML Template**: `src/_includes/base.njk` - Nunjucks template
@@ -38,7 +38,7 @@ Then open http://localhost:8080
 
 ## Editing Your CV
 
-All content is in `src/index.md` frontmatter (YAML):
+All content is in `src/index.json` (rendered by `src/index.njk`):
 
 ```yaml
 ---
@@ -118,7 +118,8 @@ npm run build
 
 ```
 src/
-├── index.md                    ← Edit this for content
+├── index.json                  ← Edit this for CV data
+├── index.njk                   ← Page entry
 ├── _includes/
 │   └── base.njk               ← Edit for layout changes
 └── assets/

@@ -12,7 +12,7 @@
   - `package.json` created
   - `package-lock.json` generated
 
-- ✅ **11ty (Eleventy)** - Version 3.1.2
+- ✅ **11ty (Eleventy)** - Version 3.1.8
   - `.eleventy.js` configured
   - Template engine: Nunjucks
   - Input: `src/`
@@ -29,7 +29,7 @@
 - ✅ `package-lock.json` - Dependency lock file
 
 ### Content
-- ✅ `src/index.md` - Complete CV data (97 lines of YAML)
+- ✅ `src/index.json` & `src/index.njk` - Complete CV data (JSON) and page entry
   - Personal info
   - Contact details
   - TLDR + Summary
@@ -165,7 +165,7 @@
 ## 🎨 Customization Ready
 
 ### Content
-- [ ] Update name/role in `src/index.md`
+- [ ] Update name/role in `src/index.json`
 - [ ] Add/edit work experience entries
 - [ ] Update skills and proficiency levels
 - [ ] Add/edit education entries
@@ -210,7 +210,7 @@ npm run build
 3. Customize colors in `src/assets/css/style.css`
 
 ### Short-term (Week 1)
-1. Update CV data in `src/index.md`
+1. Update CV data in `src/index.json`
 2. Add profile images to `src/assets/images/`
 3. Test on mobile devices
 4. Test print/PDF export
