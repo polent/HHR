@@ -1,46 +1,50 @@
-# Holger Hellinger - CV Website
+# Holger Hellinger: CV Website
 
-A modern, accessible, and responsive CV website built with **Eleventy (11ty)** and semantic HTML/CSS.
+A fast, accessible, and responsive CV website built with **Eleventy (11ty)**, semantic HTML, and modern CSS.
 
 Live site: <https://www.holger-hellinger.de/>
 
 ## Features
 
-- **Static Site Generation** — built with Eleventy for fast, reliable deployment
-- **Responsive Design** — mobile-first, CSS Grid & Flexbox
-- **Accessible** — semantic HTML5, ARIA labels, WCAG AA contrast
-- **Dark Mode** — automatic light/dark via CSS `light-dark()`
-- **Print-friendly** — dedicated print styles, Ctrl+P → save as PDF
-- **No client-side JavaScript** — pure HTML/CSS output
-- **Lightweight CSS** — custom CSS, no frameworks
-- **Inline SVG icons** — icons are inlined at build time via a custom Nunjucks filter
+- **Static Site Generation**: Built with Eleventy 3.1.8 for fast and reliable builds.
+- **Editorial Grid Layout**: Mobile-first CSS Grid and Flexbox layout with sticky section headers on desktop.
+- **Pure CSS Theme Switcher**: Interactive `Auto`, `Light`, and `Dark` switch using CSS `light-dark()` and `:has()`.
+- **Zero Client-Side JavaScript**: Pure HTML and CSS output in the browser.
+- **Inlined Critical CSS**: Build-time CSS minification and inlining via a custom `inlineCss` Nunjucks filter.
+- **Inlined SVG Icons**: Build-time SVG inlining via a custom `inlineSvg` Nunjucks filter with path validation.
+- **Responsive WebP Images**: `<picture>` element with WebP `srcset`, PNG fallbacks, and high fetch priority.
+- **Accessible by Default**: Semantic HTML5 landmarks, skip link, keyboard focus styles, reduced motion support, and WCAG AA contrast.
+- **Rich SEO and Structured Data**: Open Graph tags, Twitter Cards, canonical URL, web app manifest, and Schema.org JSON-LD `@graph`.
+- **Print and PDF Ready**: Dedicated `@media print` rules for clean black-on-white paper and PDF export.
+- **Apache Hardening**: Included `.htaccess` for HTTPS redirects, security headers, compression, and immutable caching.
 
 ## Project Structure
 
-```
+```text
 .
-├── .eleventy.js              # Eleventy configuration (passthrough + inlineSvg filter)
-├── package.json              # Dependencies and scripts
+├── .eleventy.js              # Eleventy configuration (passthrough copy, inlineSvg, inlineCss)
+├── package.json              # Dependencies and npm scripts
 ├── src/
-│   ├── index.json            # CV data (JSON) — name, contact, experience, links, ...
-│   ├── index.njk             # Page entry, uses base.njk layout
-│   ├── robots.txt
-│   ├── site.webmanifest
+│   ├── .htaccess             # Apache redirects, security headers, caching, compression
+│   ├── index.json            # CV content and metadata in JSON format
+│   ├── index.njk             # Page entry using base.njk layout
+│   ├── robots.txt            # Crawler instructions
+│   ├── site.webmanifest      # Web app manifest
 │   ├── _includes/
-│   │   └── base.njk          # HTML template (Nunjucks)
+│   │   └── base.njk          # Main Nunjucks HTML template and JSON-LD schema
 │   └── assets/
-│       ├── css/style.css     # Screen and print styles
-│       ├── icons/*.svg       # Inlined SVG icons (linkedin, github, ...)
-│       └── images/           # Profile images + responsive variants
-├── docs/                     # Project notes, AI prompt, checklists
-└── _site/                    # Build output (generated)
+│       ├── css/style.css     # Screen, theme switcher, and print styles
+│       ├── icons/*.svg       # SVG icons inlined at build time
+│       └── images/           # WebP and PNG profile images plus favicons
+├── docs/                     # Setup notes and checklists
+└── _site/                    # Generated static output
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm (Eleventy 3 requires Node 18 or newer)
+- Node.js 18+ and npm
 
 ### Installation
 
@@ -50,13 +54,13 @@ npm install
 
 ### Development
 
-Build and serve locally with live reload:
+Build and serve locally with live reload at <http://localhost:8080>:
 
 ```bash
 npm run dev
 ```
 
-The site will be available at <http://localhost:8080>.
+You can also run `npm run serve` for the same command.
 
 ### Build
 
@@ -68,107 +72,183 @@ npm run build
 
 ### Watch Mode
 
-Rebuild on file changes (no dev server):
+Rebuild on file changes without starting a local server:
 
 ```bash
 npm run watch
 ```
 
+### Clean
+
+Remove the generated `_site/` directory:
+
+```bash
+npm run clean
+```
+
 ## Customization
 
-### Edit Your CV Data
+### Edit CV Data
 
-All CV content lives in [src/index.json](src/index.json). Update fields like `name`, `role`, `contact`, `summary`, `experience`, `education`, `skills`, and `links`. Example:
+All CV content lives in [src/index.json](src/index.json). The template [src/index.njk](src/index.njk) renders this data through [src/_includes/base.njk](src/_includes/base.njk).
+
+Supported fields in `src/index.json`:
+
+- `title` and `meta_description`: Page title and SEO description.
+- `name` and `role`: Header title, role subtitle, and structured data identity.
+- `contact`: `phone`, `email`, and `location`.
+- `tldr`: Highlighted intro text card at the top of the summary section.
+- `summary`: HTML paragraphs for the main summary card.
+- `ai_prompt`: Hidden text placed in a `.visually-hidden` container.
+- `links`: External profile links with `label`, `url`, and `icon` filename.
+- `experience`: Career history entries with `period`, `role`, `company`, and `description`.
+- `skills`: Skill categories with `group` title and `items` array.
+- `education`: Education rows with `year`, `degree`, and `institution`.
+- `publications`: Articles, case studies, and talks with `year`, `title`, `link`, and optional `description`.
+
+Example structure:
 
 ```json
 {
+  "title": "Your Name | Your Role",
   "name": "Your Name",
   "role": "Your Role",
+  "meta_description": "Short summary for search engines and social cards.",
   "contact": {
-    "email": "your@email.com",
     "phone": "+49 123 456789",
+    "email": "your@email.com",
     "location": "City, Country"
   },
+  "tldr": "Short executive summary.",
+  "summary": "<p>Detailed summary paragraph.</p>",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/yourhandle",
+      "icon": "github-min.svg"
+    }
+  ],
   "experience": [
     {
       "period": "2020 - Now",
       "role": "Job Title",
       "company": "Company Name",
-      "description": "Description"
+      "description": "Role description."
+    }
+  ],
+  "skills": [
+    {
+      "group": "Architecture & Frontend",
+      "items": ["Frontend Architecture", "TypeScript", "React", "HTML5 & CSS"]
+    }
+  ],
+  "education": [
+    {
+      "year": "2018",
+      "degree": "Degree or Program",
+      "institution": "Institution Name"
+    }
+  ],
+  "publications": [
+    {
+      "year": "2026",
+      "title": "Article or Talk Title",
+      "link": "https://example.com/post",
+      "description": "Short summary of the publication."
     }
   ]
 }
 ```
 
-The template that renders this data is [src/index.njk](src/index.njk), which extends [src/_includes/base.njk](src/_includes/base.njk).
+### Customize Styling and Theme Switcher
 
-### Customize Styling
+Edit [src/assets/css/style.css](src/assets/css/style.css) to adjust colors, typography, grid breakpoints, and print rules. During the build, the `inlineCss` filter in [.eleventy.js](.eleventy.js) minifies this file and inlines it into a `<style>` tag in the HTML `<head>`.
 
-Edit [src/assets/css/style.css](src/assets/css/style.css) for colors, typography, layout, and print rules. The colour scheme uses CSS custom properties with `light-dark()` for automatic dark-mode support, e.g.:
+The theme system combines CSS `light-dark()` design tokens with a pure CSS `:has()` radio switcher:
 
 ```css
 :root {
   color-scheme: light dark;
-  --bg-color: light-dark(#ffffff, #1a1a1a);
-  --text-color: light-dark(#222222, #f0f0f0);
-  --accent-color: light-dark(#005a9c, #4da6ff);
+
+  --bg-color: light-dark(#f6f5f2, #111110);
+  --card-bg: light-dark(#ffffff, #1a1a18);
+  --card-elevated: light-dark(#efede8, #242421);
+  --text-color: light-dark(#141413, #f5f5f4);
+  --text-muted: light-dark(#57534e, #a8a29e);
+  --accent-color: light-dark(#92400e, #f59e0b);
+}
+
+:root:has(.theme-switcher input[value="light"]:checked) {
+  color-scheme: light;
+}
+
+:root:has(.theme-switcher input[value="dark"]:checked) {
+  color-scheme: dark;
 }
 ```
 
-### Profile Image
+### Profile Images
 
-Drop responsive profile images into [src/assets/images/](src/assets/images/):
+Place responsive profile image variants in [src/assets/images/](src/assets/images/):
 
-- `HolgerHellinger160.png` (160×160)
-- `HolgerHellinger320.png` (320×320)
-- `HolgerHellinger640.png` (640×640)
+- WebP variants: `HolgerHellinger160.webp`, `HolgerHellinger256.webp`, `HolgerHellinger320.webp`, `HolgerHellinger640.webp`
+- PNG fallbacks: `HolgerHellinger160.png`, `HolgerHellinger320.png`, `HolgerHellinger640.png`
 
-The template emits a responsive `srcset` automatically.
+The header `<picture>` element serves WebP with PNG fallbacks at `144x144` display size. Open Graph, Twitter Cards, and JSON-LD reference `HolgerHellinger640.png`.
 
-### Icons
+### Icons and Build Filters
 
-SVG icons in [src/assets/icons/](src/assets/icons/) are inlined into the HTML at build time via the `inlineSvg` Nunjucks filter defined in [.eleventy.js](.eleventy.js). Add a new icon by dropping the `.svg` file into that folder and referencing it from the template or `index.json` (`links[].icon`).
+[.eleventy.js](.eleventy.js) uses a safe asset reader (`readSafeAsset`) that validates file extensions and blocks path traversal outside the asset directories:
+
+- `inlineSvg`: Reads `.svg` files from [src/assets/icons/](src/assets/icons/) and inlines them at build time.
+- `inlineCss`: Reads `.css` files from [src/assets/css/](src/assets/css/), strips comments and extra whitespace, and inlines them at build time.
 
 ## Deployment
 
-`_site/` is fully static — deploy to any static host: Netlify, Vercel, GitHub Pages, Cloudflare Pages, AWS S3 + CloudFront, etc.
+Run `npm run build` and deploy the static `_site/` directory to any web server or static host.
 
-- **Build command:** `npm run build`
-- **Output directory:** `_site/`
+For Apache servers, [src/.htaccess](src/.htaccess) is copied into `_site/.htaccess` and configures:
+
+- Canonical `https://www.holger-hellinger.de/` redirect.
+- Direct `404` responses for missing `.well-known/` files.
+- Security headers (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`).
+- 1-year immutable `Cache-Control` and `Expires` headers for static assets.
+- MIME types for `.webp`, `.avif`, and `.webmanifest`.
+- `DEFLATE` text and asset compression.
 
 ## Accessibility
 
-- Semantic HTML5 (`<header>`, `<main>`, `<article>`, `<section>`)
-- Proper heading hierarchy
-- WCAG AA colour contrast
-- Responsive images with alt text
-- Keyboard navigable, screen-reader friendly
+- Semantic HTML5 structure (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`).
+- Keyboard skip link (`.skip-link`) and `:focus-visible` outlines.
+- `prefers-reduced-motion` media query support.
+- Accessible education table with `<caption>` and `<th scope="col">`.
+- WCAG AA color contrast across light and dark themes.
 
-## Print & PDF
+## Print and PDF
 
-The CV is print-optimised:
+The CV includes dedicated `@media print` styles:
 
-1. **From browser:** `Ctrl+P` (Windows/Linux) or `Cmd+P` (macOS)
-2. **To PDF:** choose "Save as PDF" in the print dialog
-3. Print CSS forces black-on-white, suppresses backgrounds, avoids breaking content across pages, and hides non-essential elements
+1. Press `Ctrl+P` on Windows/Linux or `Cmd+P` on macOS.
+2. Select "Save as PDF" or print directly.
+3. Print mode forces a black-on-white palette, hides the theme switcher and external profile buttons, prevents page breaks inside cards, and prints full URLs next to publication links.
 
 ## Browser Support
 
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Responsive down to 320px width
+- Chrome and Edge 123+
+- Firefox 121+
+- Safari 17.5+
+- Responsive layout down to 320px viewport width
 
 ## Performance
 
-- Zero client-side JavaScript
-- Minimal CSS (< 10 KB)
-- Responsive images via `srcset`
-- Static output — CDN-friendly
+- Zero client-side JavaScript.
+- Minified and inlined CSS in `<head>` with no render-blocking stylesheet request.
+- Build-time inlined SVG icons.
+- Responsive WebP images with `fetchpriority="high"` and explicit dimensions.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
 
 ## Author
 
