@@ -1,7 +1,33 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+function readSafeAsset(subdir, expectedExt, filename) {
+  if (typeof filename !== "string" || filename.length === 0) {
+    return "";
+  }
+  const safeName = path.basename(filename);
+  if (path.extname(safeName).toLowerCase() !== expectedExt) {
+    console.warn(`Invalid ${expectedExt.slice(1).toUpperCase()} filename: ${filename}`);
+    return "";
+  }
+  const assetDir = path.resolve(__dirname, subdir);
+  const filepath = path.resolve(assetDir, safeName);
+  if (!filepath.startsWith(assetDir + path.sep)) {
+    console.warn(`Invalid ${expectedExt.slice(1).toUpperCase()} path: ${filename}`);
+    return "";
+  }
+  try {
+    return fs.readFileSync(filepath, "utf8");
+  } catch (error) {
+    console.warn(`${expectedExt.slice(1).toUpperCase()} file not found: ${filepath}`, error.message);
+    return "";
+  }
+}
+
 module.exports = function (eleventyConfig) {
+  // Watch CSS changes during dev/watch builds
+  eleventyConfig.addWatchTarget("./src/assets/css/");
+
   // Passthrough copy for assets (CSS, Images)
   eleventyConfig.addPassthroughCopy("src/assets");
   
@@ -12,26 +38,21 @@ module.exports = function (eleventyConfig) {
 
   // Add Nunjucks filter to load SVG files inline
   eleventyConfig.addNunjucksFilter("inlineSvg", function (filename) {
-    if (typeof filename !== "string" || filename.length === 0) {
+    return readSafeAsset("src/assets/icons", ".svg", filename);
+  });
+
+  // Add Nunjucks filter to inline and minify CSS files
+  eleventyConfig.addNunjucksFilter("inlineCss", function (filename) {
+    const raw = readSafeAsset("src/assets/css", ".css", filename);
+    if (!raw) {
       return "";
     }
-    const safeName = path.basename(filename);
-    if (path.extname(safeName).toLowerCase() !== ".svg") {
-      console.warn(`Invalid SVG filename: ${filename}`);
-      return "";
-    }
-    const iconsDir = path.resolve(__dirname, "src/assets/icons");
-    const filepath = path.resolve(iconsDir, safeName);
-    if (!filepath.startsWith(iconsDir + path.sep)) {
-      console.warn(`Invalid SVG path: ${filename}`);
-      return "";
-    }
-    try {
-      return fs.readFileSync(filepath, "utf8");
-    } catch (error) {
-      console.warn(`SVG file not found: ${filepath}`, error.message);
-      return "";
-    }
+    return raw
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\s+/g, " ")
+      .replace(/\s*([{}:;,])\s*/g, "$1")
+      .replace(/;}/g, "}")
+      .trim();
   });
 
   return {

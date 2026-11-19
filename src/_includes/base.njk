@@ -43,7 +43,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>{{ "style.css" | inlineCss | safe }}</style>
   
   <!-- JSON-LD Structured Data -->
   {%- set nameParts = name.split(' ') -%}
@@ -159,18 +159,30 @@
 
     <!-- Header -->
     <header class="header-main">
-      <img
-        class="profile-img"
-        alt="Portrait of {{ name }}"
-        width="160"
-        height="160"
-        sizes="160px"
-        src="/assets/images/HolgerHellinger160.png"
-        srcset="
-          /assets/images/HolgerHellinger160.png 160w,
-          /assets/images/HolgerHellinger320.png 320w,
-          /assets/images/HolgerHellinger640.png 640w
-        ">
+      <picture>
+        <source
+          type="image/webp"
+          sizes="144px"
+          srcset="
+            /assets/images/HolgerHellinger160.webp 160w,
+            /assets/images/HolgerHellinger256.webp 256w,
+            /assets/images/HolgerHellinger320.webp 320w,
+            /assets/images/HolgerHellinger640.webp 640w
+          ">
+        <img
+          class="profile-img"
+          alt="Portrait of {{ name }}"
+          width="144"
+          height="144"
+          sizes="144px"
+          fetchpriority="high"
+          src="/assets/images/HolgerHellinger160.png"
+          srcset="
+            /assets/images/HolgerHellinger160.png 160w,
+            /assets/images/HolgerHellinger320.png 320w,
+            /assets/images/HolgerHellinger640.png 640w
+          ">
+      </picture>
 
       <div class="header-content">
         <h1>{{ name }}</h1>

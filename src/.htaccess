@@ -1,3 +1,7 @@
+<IfModule mod_speling.c>
+    CheckSpelling Off
+</IfModule>
+
 RewriteEngine On
 
 # Force HTTPS and WWW
@@ -5,6 +9,12 @@ RewriteEngine On
 RewriteCond %{HTTP_HOST} !^www\.(.*)$ [OR,NC]
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://www.holger-hellinger.de/$1 [R=301,L]
+
+# Return 404 for missing .well-known files instead of Apache 300 Multiple Choices
+RewriteCond %{REQUEST_URI} ^/\.well-known/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ - [R=404,L]
 
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -14,13 +24,34 @@ RewriteRule ^(.*)$ https://www.holger-hellinger.de/$1 [R=301,L]
     Header set X-UA-Compatible "IE=edge"
     # `mod_headers` can't match based on the content-type, however, we only
     # want to send this header for HTML pages and not for the other resources
-    <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webapp|webm|webp|woff|xml|xpi)$">
+    <FilesMatch "\.(appcache|avif|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webapp|webm|webp|woff|woff2|xml|xpi)$">
         Header unset X-UA-Compatible
     </FilesMatch>
+    <FilesMatch "\.(avif|css|eot|gif|ico|jpe?g|js|otf|pdf|png|svg|svgz|ttf|webp|woff|woff2)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
 <IfModule mod_mime.c>
     AddCharset utf-8 .atom .css .js .json .rss .vtt .webapp .xml
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType application/manifest+json .webmanifest
 </IfModule>
 
 <IfModule mod_deflate.c>
