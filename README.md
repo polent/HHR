@@ -192,7 +192,7 @@ The theme system combines CSS `light-dark()` design tokens with a pure CSS `:has
 Place responsive profile image variants in [src/assets/images/](src/assets/images/):
 
 - WebP variants: `HolgerHellinger160.webp`, `HolgerHellinger256.webp`, `HolgerHellinger320.webp`, `HolgerHellinger640.webp`
-- PNG fallbacks: `HolgerHellinger160.png`, `HolgerHellinger320.png`, `HolgerHellinger640.png`
+- PNG fallbacks: `HolgerHellinger160.png`, `HolgerHellinger256.png`, `HolgerHellinger320.png`, `HolgerHellinger640.png`
 
 The header `<picture>` element serves WebP with PNG fallbacks at `144x144` display size. Open Graph, Twitter Cards, and JSON-LD reference `HolgerHellinger640.png`.
 

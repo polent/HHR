@@ -139,118 +139,121 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <div class="container">
-    <div class="top-bar">
-      <fieldset class="theme-switcher">
-        <legend class="visually-hidden">Color theme</legend>
-        <label class="theme-option">
-          <input type="radio" name="theme" value="auto" checked>
-          <span>Auto</span>
-        </label>
-        <label class="theme-option">
-          <input type="radio" name="theme" value="light">
-          <span>Light</span>
-        </label>
-        <label class="theme-option">
-          <input type="radio" name="theme" value="dark">
-          <span>Dark</span>
-        </label>
-      </fieldset>
-    </div>
-
     <!-- Header -->
-    <header class="header-main">
-      <picture>
-        <source
-          type="image/webp"
-          sizes="144px"
-          srcset="
-            /assets/images/HolgerHellinger160.webp 160w,
-            /assets/images/HolgerHellinger256.webp 256w,
-            /assets/images/HolgerHellinger320.webp 320w,
-            /assets/images/HolgerHellinger640.webp 640w
-          ">
-        <img
-          class="profile-img"
-          alt="Portrait of {{ name }}"
-          width="144"
-          height="144"
-          sizes="144px"
-          fetchpriority="high"
-          src="/assets/images/HolgerHellinger160.png"
-          srcset="
-            /assets/images/HolgerHellinger160.png 160w,
-            /assets/images/HolgerHellinger320.png 320w,
-            /assets/images/HolgerHellinger640.png 640w
-          ">
-      </picture>
+    <header class="site-header">
+      <div class="top-bar">
+        <fieldset class="theme-switcher">
+          <legend class="visually-hidden">Color theme</legend>
+          <label class="theme-option">
+            <input type="radio" name="theme" value="auto" checked>
+            <span>Auto</span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="theme" value="light">
+            <span>Light</span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="theme" value="dark">
+            <span>Dark</span>
+          </label>
+        </fieldset>
+      </div>
 
-      <div class="header-content">
-        <h1>{{ name }}</h1>
-        <p class="role">{{ role }}</p>
+      <div class="header-main">
+        <picture>
+          <source
+            type="image/webp"
+            sizes="144px"
+            srcset="
+              /assets/images/HolgerHellinger160.webp 160w,
+              /assets/images/HolgerHellinger256.webp 256w,
+              /assets/images/HolgerHellinger320.webp 320w,
+              /assets/images/HolgerHellinger640.webp 640w
+            ">
+          <img
+            class="profile-img"
+            alt="Portrait of {{ name }}"
+            width="144"
+            height="144"
+            sizes="144px"
+            fetchpriority="high"
+            src="/assets/images/HolgerHellinger160.png"
+            srcset="
+              /assets/images/HolgerHellinger160.png 160w,
+              /assets/images/HolgerHellinger256.png 256w,
+              /assets/images/HolgerHellinger320.png 320w,
+              /assets/images/HolgerHellinger640.png 640w
+            ">
+        </picture>
 
-        <ul class="contact-list">
-          <li>
-            <span class="contact-item">
-              <span class="contact-icon" aria-hidden="true">{{ "address-min.svg" | inlineSvg | safe }}</span>
-              <span>{{ contact.location }}</span>
-            </span>
-          </li>
-          <li>
-            <a href="tel:{{ contact.phone | replace(' ', '') }}" class="contact-item">
-              <span class="contact-icon" aria-hidden="true">{{ "telephone-min.svg" | inlineSvg | safe }}</span>
-              <span>{{ contact.phone }}</span>
-            </a>
-          </li>
-          <li>
-            <a href="mailto:{{ contact.email }}" class="contact-item">
-              <span class="contact-icon" aria-hidden="true">{{ "email-min.svg" | inlineSvg | safe }}</span>
-              <span>{{ contact.email }}</span>
-            </a>
-          </li>
-        </ul>
+        <div class="header-content">
+          <h1>{{ name }}</h1>
+          <p class="role">{{ role }}</p>
 
-        {% if links %}
-        <nav aria-label="External profiles" class="header-links">
-          <ul class="links-list">
-            {% for link in links %}
+          <ul class="contact-list">
             <li>
-              <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
-                {% if link.icon %}
-                <span class="link-icon" aria-hidden="true">{{ link.icon | inlineSvg | safe }}</span>
-                {% endif %}
-                <span class="link-text">{{ link.label }}</span>
+              <span class="contact-item">
+                <span class="contact-icon" aria-hidden="true">{{ "address-min.svg" | inlineSvg | safe }}</span>
+                <span>{{ contact.location }}</span>
+              </span>
+            </li>
+            <li>
+              <a href="tel:{{ contact.phone | replace(' ', '') }}" class="contact-item">
+                <span class="contact-icon" aria-hidden="true">{{ "telephone-min.svg" | inlineSvg | safe }}</span>
+                <span>{{ contact.phone }}</span>
               </a>
             </li>
-            {% endfor %}
+            <li>
+              <a href="mailto:{{ contact.email }}" class="contact-item">
+                <span class="contact-icon" aria-hidden="true">{{ "email-min.svg" | inlineSvg | safe }}</span>
+                <span>{{ contact.email }}</span>
+              </a>
+            </li>
           </ul>
-        </nav>
-        {% endif %}
+
+          {% if links %}
+          <nav aria-label="External profiles" class="header-links">
+            <ul class="links-list">
+              {% for link in links %}
+              <li>
+                <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-with-icon">
+                  {% if link.icon %}
+                  <span class="link-icon" aria-hidden="true">{{ link.icon | inlineSvg | safe }}</span>
+                  {% endif %}
+                  <span class="link-text">{{ link.label }}</span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </nav>
+          {% endif %}
+        </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main id="main-content" class="main-content">
-      <section id="summary" class="cv-section">
+    <main id="main-content" class="main-content" tabindex="-1">
+      <section id="summary" class="cv-section" aria-labelledby="heading-summary">
         <div class="section-header">
-          <h2>Summary</h2>
+          <h2 id="heading-summary">Summary</h2>
         </div>
         <div class="section-body">
           <div class="tldr-card">
             <p class="tldr">{{ tldr }}</p>
           </div>
-          <div class="about-content card-surface">
+          <div class="about-content">
             {{ summary | safe }}
           </div>
         </div>
       </section>
 
-      <section id="experience" class="cv-section">
+      <section id="experience" class="cv-section" aria-labelledby="heading-experience">
         <div class="section-header">
-          <h2>Experience</h2>
+          <h2 id="heading-experience">Experience</h2>
         </div>
         <div class="section-body experience-list">
           {% for job in experience %}
-          <article class="job-item card-surface">
+          <article class="job-item">
             <div class="job-header">
               <span class="meta">{{ job.period }}</span>
               <div class="job-title-group">
@@ -264,13 +267,13 @@
         </div>
       </section>
 
-      <section id="skills" class="cv-section">
+      <section id="skills" class="cv-section" aria-labelledby="heading-skills">
         <div class="section-header">
-          <h2>Skills</h2>
+          <h2 id="heading-skills">Skills</h2>
         </div>
         <div class="section-body skills-container">
           {% for skillGroup in skills %}
-          <div class="skill-group card-surface">
+          <div class="skill-group">
             <h3 class="skill-group-title">{{ skillGroup.group }}</h3>
             <ul class="skills-list">
               {% for item in skillGroup.items %}
@@ -282,12 +285,12 @@
         </div>
       </section>
 
-      <section id="education" class="cv-section">
+      <section id="education" class="cv-section" aria-labelledby="heading-education">
         <div class="section-header">
-          <h2>Education</h2>
+          <h2 id="heading-education">Education</h2>
         </div>
         <div class="section-body">
-          <div class="card-surface table-card">
+          <div class="table-card">
             <table class="edu-table">
               <caption class="visually-hidden">Education history</caption>
               <thead>
@@ -312,18 +315,18 @@
       </section>
 
       {% if publications %}
-      <section id="publications" class="cv-section">
+      <section id="publications" class="cv-section" aria-labelledby="heading-publications">
         <div class="section-header">
-          <h2>Publications &amp; Projects</h2>
+          <h2 id="heading-publications">Publications &amp; Projects</h2>
         </div>
         <div class="section-body">
           <ul class="publications-list">
             {% for pub in publications %}
-            <li class="pub-item card-surface">
+            <li class="pub-item">
               <time datetime="{{ pub.year }}" class="meta">{{ pub.year }}</time>
               <div class="pub-body">
                 <h3>
-                  <a href="{{ pub.link }}" class="pub-link">{{ pub.title }}</a>
+                  <a href="{{ pub.link }}" class="pub-link">{{ pub.title }} <span class="pub-arrow" aria-hidden="true">&#8599;</span></a>
                 </h3>
                 {% if pub.description %}<p>{{ pub.description }}</p>{% endif %}
               </div>
